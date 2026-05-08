@@ -1,0 +1,23 @@
+{
+  "skill_name": "production-release-documentation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate production release documentation for PR #1842. Validate whether it is deployed to UAT first and stop with failure message if not eligible.",
+      "expected_output": "Either a strict UAT validation failure message with latest UAT release link, or a full stakeholder-ready release document with all required sections and release boundary ending exactly at PR #1842.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Create PROD deployment documentation using commit 9f3b21c as the release cutoff. Include only commits after the last successful PROD release up to this commit and exclude anything merged later.",
+      "expected_output": "Document includes boundary-safe commit/PR scope, metadata, rollback, risk table, timeline, and GitHub links.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Prepare enterprise release notes for production using PR #1907 as deployment point. Pull workflow/build/approval data from GitHub and provide rollback details from last successful PROD release.",
+      "expected_output": "Output contains executive summary, validation status, release summary table, included PRs/commits table, deployment analysis, rollback, checklist, risks, and timeline with traceable links.",
+      "files": []
+    }
+  ]
+}
