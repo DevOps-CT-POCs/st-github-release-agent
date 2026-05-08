@@ -14,6 +14,7 @@ You are an expert in:
 - **GitHub Actions CI/CD** — Designing and scaffolding release workflows
 - **Artifact Signing & Supply Chain Security** — Sigstore/Cosign, GPG, SBOM generation, SLSA provenance
 - **Hotfix Management** — Emergency release workflows with expedited pipelines
+- **GitHub CLI (`gh`)** — Creating releases, managing PRs/issues, monitoring workflow runs, and interacting with the GitHub API from the terminal
 
 ---
 
@@ -55,6 +56,22 @@ User Request
 │   └── 3. Invoke: github-actions-release
 │       └── Scaffold or update release workflow → create GitHub Release
 │
+├── "Publish a GitHub Release" / "Upload assets" / "Create a release on GitHub"
+│   └── Invoke: gh-cli
+│       └── Use `gh release create`, `gh release upload`, `gh release edit`
+│
+├── "Check CI status" / "Re-run workflow" / "Watch the build" / "Trigger workflow"
+│   └── Invoke: gh-cli
+│       └── Use `gh run list/view/watch/rerun`, `gh workflow run`
+│
+├── "Create a PR" / "Merge PR" / "Review PR" / "Open an issue"
+│   └── Invoke: gh-cli
+│       └── Use `gh pr create/merge/review`, `gh issue create/list/close`
+│
+├── "Set a secret" / "Manage variables" / "Call the GitHub API"
+│   └── Invoke: gh-cli
+│       └── Use `gh secret set`, `gh variable set`, `gh api`
+│
 ├── "Sign artifacts" / "Add SBOM" / "Secure the release"
 │   └── Invoke: artifact-signing-sbom
 │       └── Configure Sigstore/Cosign → generate SBOM → add SLSA attestation
@@ -79,6 +96,7 @@ User Request
 2. **Always run `changelog-generation` before `github-actions-release`** — the release notes include the changelog
 3. **`artifact-signing-sbom` can run independently** — it adds security steps to an existing workflow
 4. **`hotfix-release` is a standalone flow** — it has its own expedited pipeline
+5. **`gh-cli` is the execution layer** — other skills produce configs/versions/changelogs, then `gh-cli` publishes the result (e.g., `gh release create`, `gh pr create`)
 
 ---
 
@@ -150,11 +168,12 @@ Follow [Keep a Changelog](https://keepachangelog.com/) with these sections:
 
 | Skill | Path | Purpose |
 |-------|------|---------|
-| Semantic Versioning | `.gemini/skills/semantic-versioning/SKILL.md` | Version calculation, tagging, pre-release management |
-| Changelog Generation | `.gemini/skills/changelog-generation/SKILL.md` | CHANGELOG.md creation and updates |
-| GitHub Actions Release | `.gemini/skills/github-actions-release/SKILL.md` | CI/CD workflow scaffolding and GitHub Release creation |
-| Artifact Signing & SBOM | `.gemini/skills/artifact-signing-sbom/SKILL.md` | Sigstore/Cosign signing, SBOM, SLSA provenance |
-| Hotfix Release | `.gemini/skills/hotfix-release/SKILL.md` | Emergency hotfix workflow |
+| Semantic Versioning | `.agents/skills/semantic-versioning/SKILL.md` | Version calculation, tagging, pre-release management |
+| Changelog Generation | `.agents/skills/changelog-generation/SKILL.md` | CHANGELOG.md creation and updates |
+| GitHub Actions Release | `.agents/skills/github-actions-release/SKILL.md` | CI/CD workflow scaffolding and GitHub Release creation |
+| Artifact Signing & SBOM | `.agents/skills/artifact-signing-sbom/SKILL.md` | Sigstore/Cosign signing, SBOM, SLSA provenance |
+| Hotfix Release | `.agents/skills/hotfix-release/SKILL.md` | Emergency hotfix workflow |
+| GitHub CLI (`gh`) | `.agents/skills/gh-cli/SKILL.md` | Creating releases, managing PRs/issues, workflow runs, secrets, and GitHub API access from the terminal |
 
 ---
 

@@ -32,7 +32,7 @@ git clone https://github.com/your-org/release-agent.git /tmp/release-agent
 
 # Copy the agent files
 cp -r /tmp/release-agent/AGENTS.md ./
-cp -r /tmp/release-agent/.gemini ./
+cp -r /tmp/release-agent/.agents ./
 cp -r /tmp/release-agent/.github ./
 
 # Clean up
@@ -44,7 +44,7 @@ Or copy the files manually:
 ```
 Your Project/
 ├── AGENTS.md                          ← Copy this
-├── .gemini/
+├── .agents/
 │   └── skills/                        ← Copy this entire directory
 │       ├── semantic-versioning/
 │       ├── changelog-generation/
@@ -74,17 +74,17 @@ The agent will:
 
 ### Antigravity
 
-The agent works natively with Antigravity. Skills are auto-discovered from `.gemini/skills/`.
+The agent works natively with Antigravity. Skills are auto-discovered from `.agents/skills/`.
 
 **Project-level** (recommended):
 ```
-your-project/.gemini/skills/    ← Agent skills here
+your-project/.agents/skills/    ← Agent skills here
 your-project/AGENTS.md          ← Agent identity here
 ```
 
 **User-level** (shared across projects):
 ```
-~/.gemini/skills/    ← Copy skills here for global access
+~/.agents/skills/    ← Copy skills here for global access
 ```
 
 Open your project in Antigravity and start prompting — the agent context is loaded automatically.
@@ -154,11 +154,11 @@ your-project/.windsurfrules      ← Paste AGENTS.md content
 
 | Skill | Path | Trigger Phrases |
 |-------|------|----------------|
-| **Semantic Versioning** | `.gemini/skills/semantic-versioning/SKILL.md` | "bump version", "next version", "create release" |
-| **Changelog Generation** | `.gemini/skills/changelog-generation/SKILL.md` | "generate changelog", "what changed", "release notes" |
-| **GitHub Actions Release** | `.gemini/skills/github-actions-release/SKILL.md` | "set up CI/CD", "create workflow", "automate releases" |
-| **Artifact Signing & SBOM** | `.gemini/skills/artifact-signing-sbom/SKILL.md` | "sign artifacts", "add SBOM", "supply chain security" |
-| **Hotfix Release** | `.gemini/skills/hotfix-release/SKILL.md` | "hotfix", "emergency patch", "critical bug in production" |
+| **Semantic Versioning** | `.agents/skills/semantic-versioning/SKILL.md` | "bump version", "next version", "create release" |
+| **Changelog Generation** | `.agents/skills/changelog-generation/SKILL.md` | "generate changelog", "what changed", "release notes" |
+| **GitHub Actions Release** | `.agents/skills/github-actions-release/SKILL.md` | "set up CI/CD", "create workflow", "automate releases" |
+| **Artifact Signing & SBOM** | `.agents/skills/artifact-signing-sbom/SKILL.md` | "sign artifacts", "add SBOM", "supply chain security" |
+| **Hotfix Release** | `.agents/skills/hotfix-release/SKILL.md` | "hotfix", "emergency patch", "critical bug in production" |
 
 ---
 
@@ -178,25 +178,37 @@ It will adjust:
 
 ### Adding Custom Skills
 
-Create a new skill in `.gemini/skills/your-skill-name/SKILL.md` following this template:
+Create a new skill in `.agents/skills/your-skill-name/SKILL.md` following this template:
 
 ```markdown
-# Skill: Your Skill Name
+---
+name: your-skill-name
+description: Use when users ask about <trigger phrases>. Describe what this skill does.
+---
 
 Description of what this skill does.
 
-## When to Use This Skill
+## When to Use
+
+Use this skill when the request is about:
 - Trigger conditions
 
-## Inputs
-| Input | Required | Description |
-|-------|----------|-------------|
+Do not use this skill for:
+- Other skills that handle adjacent concerns
 
-## Process
+## Workflow
+
+### 1. Step name
 Step-by-step instructions for the agent.
 
-## Output
+## Answer Shape
 What the skill produces.
+
+## Edge Cases
+1. Edge case handling
+
+## Common Mistakes
+- Mistakes to avoid
 ```
 
 Then reference it in `AGENTS.md` under the Skills table and decision tree.
@@ -224,8 +236,12 @@ Then reference it in `AGENTS.md` under the Skills table and decision tree.
 .
 ├── AGENTS.md                                    # Agent identity & orchestration
 ├── README.md                                    # This file
-├── .gemini/
+├── .agents/
 │   └── skills/
+│       ├── github-actions-docs/
+│       │   ├── SKILL.md                         # GitHub Actions documentation
+│       │   └── references/
+│       │       └── topic-map.md                 # Docs topic index
 │       ├── semantic-versioning/
 │       │   └── SKILL.md                         # Version calculation & tagging
 │       ├── changelog-generation/

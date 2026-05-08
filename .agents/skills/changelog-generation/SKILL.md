@@ -1,18 +1,28 @@
-# Skill: Changelog Generation
+---
+name: changelog-generation
+description: Use when users ask to generate a changelog, update release notes, or understand what changed between versions. Parses Conventional Commits into a structured, human-readable CHANGELOG.md following the Keep a Changelog format, with contributor attribution and commit links.
+---
 
 Parse Conventional Commits into a structured, human-readable `CHANGELOG.md` following the Keep a Changelog format.
 
----
+## When to Use
 
-## When to Use This Skill
+Use this skill when the request is about:
 
-- After `semantic-versioning` has determined the new version
-- User asks to "generate a changelog," "update release notes," or "what changed?"
-- As part of the standard release flow
+- Generating a changelog or release notes from commit history
+- Updating `CHANGELOG.md` for a new release
+- Understanding "what changed" between two versions or tags
+- Creating a new `CHANGELOG.md` from scratch for an existing repository
 
----
+Do not use this skill for:
 
-## Inputs
+- Determining the version number. Use `semantic-versioning` first.
+- Scaffolding CI/CD release workflows. Use `github-actions-release`.
+- GitHub Actions workflow syntax or documentation. Use `github-actions-docs`.
+
+## Workflow
+
+### 1. Gather Inputs
 
 | Input | Required | Description |
 |-------|----------|-------------|
@@ -21,18 +31,14 @@ Parse Conventional Commits into a structured, human-readable `CHANGELOG.md` foll
 | Repository URL | Yes | GitHub repository URL for compare links |
 | Include contributors | No | Whether to list contributors (default: `true`) |
 
----
-
-## Process
-
-### Step 1: Collect Commits Between Tags
+### 2. Collect Commits Between Tags
 
 ```bash
 # Get structured commit data
 git log v1.2.0..HEAD --pretty=format:"%H|%an|%ae|%s" --no-merges
 ```
 
-### Step 2: Categorize Commits
+### 3. Categorize Commits
 
 Map each commit to a changelog section based on its Conventional Commit type:
 
@@ -50,7 +56,7 @@ Map each commit to a changelog section based on its Conventional Commit type:
 
 **Ordering:** Breaking Changes → Features → Bug Fixes → Performance → Documentation → Maintenance → Tests → Styles → Reverts
 
-### Step 3: Extract Contributor Information
+### 4. Extract Contributor Information
 
 ```bash
 # Get unique contributors for the release
@@ -64,7 +70,7 @@ Map contributors to their GitHub usernames if possible:
 git log v1.2.0..HEAD --pretty=format:"%an|%(trailers:key=Co-authored-by,valueonly)" --no-merges
 ```
 
-### Step 4: Generate Changelog Entry
+### 5. Generate Changelog Entry
 
 Produce a changelog entry in this format:
 
@@ -100,7 +106,7 @@ Produce a changelog entry in this format:
 - @username3
 ```
 
-### Step 5: Update CHANGELOG.md
+### 6. Update CHANGELOG.md
 
 Insert the new entry at the top of `CHANGELOG.md`, preserving existing content:
 
@@ -131,7 +137,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 [1.2.0]: https://github.com/owner/repo/compare/v1.1.0...v1.2.0
 ```
 
-### Step 6: Create a New CHANGELOG.md (if none exists)
+### 7. Create a New CHANGELOG.md (if none exists)
 
 If no `CHANGELOG.md` exists, create one from scratch with all available history:
 
@@ -142,9 +148,7 @@ git tag --sort=version:refname | grep '^v[0-9]'
 
 Generate entries for each version pair, starting from the earliest.
 
----
-
-## Output
+## Answer Shape
 
 Provide:
 
@@ -164,8 +168,6 @@ Provide:
 | Contributors | 4 |
 ```
 
----
-
 ## Edge Cases
 
 1. **No CHANGELOG.md exists** → Create one with the header and first entry
@@ -175,3 +177,10 @@ Provide:
 5. **Revert commits** → Cross-reference the original commit being reverted
 6. **Co-authored commits** → Credit all co-authors as contributors
 7. **Very long descriptions** → Truncate at 120 characters with `...` and link to the full commit
+
+## Common Mistakes
+
+- Running changelog generation before semantic-versioning (the version must be known first)
+- Overwriting existing changelog entries instead of prepending
+- Forgetting to update the comparison links at the bottom of the file
+- Missing the `[Unreleased]` section when updating
