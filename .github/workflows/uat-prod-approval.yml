@@ -1,0 +1,34 @@
+name: UAT and Prod Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kubernetes-ls-uat-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy-uat:
+    name: Deploy to UAT
+    runs-on: ubuntu-latest
+    environment:
+      name: uat
+    steps:
+      - name: UAT placeholder
+        run: echo "UAT deployment completed"
+
+  deploy-prod:
+    name: Deploy to Prod
+    runs-on: ubuntu-latest
+    needs: deploy-uat
+    environment:
+      name: production
+    steps:
+      - name: Echo hello
+        run: echo "hello"
