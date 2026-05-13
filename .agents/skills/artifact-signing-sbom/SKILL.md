@@ -3,23 +3,14 @@ name: artifact-signing-sbom
 description: Use when users ask to sign artifacts, add SBOM, secure the supply chain, add provenance, or harden a release pipeline with Sigstore/Cosign keyless signing, Software Bill of Materials generation, and SLSA provenance attestation.
 ---
 
-Configure Sigstore/Cosign keyless signing, generate Software Bill of Materials (SBOM), and add SLSA provenance attestation to release artifacts.
+Configure Sigstore/Cosign keyless signing, SBOM generation, and SLSA provenance attestation for release artifacts.
 
 ## When to Use
 
-Use this skill when the request is about:
-
-- Signing release artifacts (container images, binaries, archives)
-- Generating an SBOM (Software Bill of Materials)
-- Adding SLSA provenance attestation to a release pipeline
+- Signing release artifacts (containers, binaries, archives)
+- Generating SBOM (Software Bill of Materials)
+- Adding SLSA provenance attestation
 - Hardening an existing release workflow for supply chain security
-- Verifying signed artifacts or attestations
-
-Do not use this skill for:
-
-- Scaffolding the release workflow itself. Use `github-actions-release`.
-- Version calculation or tagging. Use `semantic-versioning`.
-- General GitHub Actions syntax. Use `github-actions-docs`.
 
 ## Workflow
 
@@ -28,39 +19,36 @@ Do not use this skill for:
 | Input | Required | Description |
 |-------|----------|-------------|
 | Artifact type | Yes | `container-image`, `binary`, `archive`, or `npm-package` |
-| Registry URL | Conditional | Required for container images (e.g., `ghcr.io/owner/repo`) |
+| Registry URL | Conditional | Required for containers (e.g., `ghcr.io/owner/repo`) |
 | SBOM format | No | `spdx-json` (default) or `cyclonedx-json` |
-| SLSA level | No | Target SLSA level: 1, 2, or 3 (default: 2) |
+| SLSA level | No | 1, 2, or 3 (default: 2) |
 
-### 2. Sigstore/Cosign Keyless Signing
+### 2. Cosign Keyless Signing
 
-Cosign keyless signing uses OIDC federation — no private keys to manage. GitHub Actions provides the identity token automatically.
+Uses OIDC federation — no private keys. GitHub Actions provides the identity token.
 
-For container images:
+**Containers:**
 ```yaml
 - uses: sigstore/cosign-installer@v3.8.0
 - run: cosign sign --yes "${REGISTRY}/${IMAGE}@${DIGEST}"
 ```
 
-For binary artifacts:
+**Binaries:**
 ```yaml
 - run: |
     for artifact in dist/*; do
-      cosign sign-blob --yes \
-        --output-signature "${artifact}.sig" \
-        --output-certificate "${artifact}.pem" \
-        "${artifact}"
+      cosign sign-blob --yes --output-signature "${artifact}.sig" --output-certificate "${artifact}.pem" "${artifact}"
     done
 ```
 
 ### 3. SBOM Generation
 
-Use Syft (recommended) or CycloneDX for language-specific SBOMs. Attest SBOMs to container images using `cosign attest`.
+Use Syft (recommended) or CycloneDX. Attest SBOMs to container images with `cosign attest`.
 
-### 4. SLSA Provenance Attestation
+### 4. SLSA Provenance
 
-- **Level 2**: Use `actions/attest-build-provenance@v2`
-- **Level 3**: Use `slsa-framework/slsa-github-generator`
+- **Level 2:** `actions/attest-build-provenance@v2`
+- **Level 3:** `slsa-framework/slsa-github-generator`
 
 ### 5. Required Permissions
 
@@ -68,25 +56,17 @@ Use Syft (recommended) or CycloneDX for language-specific SBOMs. Attest SBOMs to
 permissions:
   contents: write
   packages: write
-  id-token: write
+  id-token: write      # Required for keyless signing
   attestations: write
 ```
 
 ## Answer Shape
 
-Provide modified workflow YAML with signing, SBOM, and attestation steps, verification commands for consumers, and a security posture summary.
+Modified workflow YAML with signing/SBOM/attestation steps + verification commands for consumers + security posture summary.
 
 ## Edge Cases
 
-1. **Private repos** → Cosign keyless still works; OIDC issuer is the same
-2. **Self-hosted runners** → Ensure network access to `fulcio.sigstore.dev`, `rekor.sigstore.dev`
-3. **Air-gapped environments** → Fall back to GPG signing with imported keys
-4. **Multi-arch images** → Sign the manifest list digest, not individual platform digests
-5. **npm packages** → Use `npm publish --provenance` for built-in SLSA attestation
-
-## Common Mistakes
-
-- Signing individual platform digests instead of the manifest list for multi-arch images
-- Forgetting `id-token: write` permission required for keyless signing
-- Using long-lived secrets when OIDC keyless authentication is available
-- Not providing verification commands for consumers of the signed artifacts
+- **Self-hosted runners** → ensure network access to `fulcio.sigstore.dev`, `rekor.sigstore.dev`
+- **Air-gapped** → fall back to GPG signing with imported keys
+- **Multi-arch images** → sign the manifest list digest, not individual platform digests
+- **npm packages** → use `npm publish --provenance` for built-in SLSA attestation

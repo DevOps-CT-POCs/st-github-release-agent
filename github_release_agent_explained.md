@@ -42,7 +42,7 @@ graph TD
 
 | Layer | File(s) | Purpose |
 |-------|---------|---------|
-| **Brain** | [AGENTS.md](file:///d:/Agent/st-github-release-agent/AGENTS.md) | Identity, rules, decision tree — tells the AI *who it is* and *how to think* |
+| **Brain** | [AGENTS.md](AGENTS.md) | Identity, rules, decision tree — tells the AI *who it is* and *how to think* |
 | **Skills** | `.agents/skills/*/SKILL.md` | Step-by-step instructions for specific tasks |
 | **References** | `references/*.md` inside skills | Reusable YAML snippets, doc links, templates |
 
@@ -62,7 +62,7 @@ When you type a request, the agent reads `AGENTS.md` and follows the **decision 
 
 ## Skill 1: Semantic Versioning 🔢
 
-**File:** [SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/semantic-versioning/SKILL.md)
+**File:** [SKILL.md](.agents/skills/semantic-versioning/SKILL.md)
 
 ### What Is Semantic Versioning?
 
@@ -125,7 +125,7 @@ v3.0.0-alpha.1  →  v3.0.0-alpha.2  →  v3.0.0-beta.1  →  v3.0.0-rc.1  →  
 
 ## Skill 2: Changelog Generation 📝
 
-**File:** [SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/changelog-generation/SKILL.md)
+**File:** [SKILL.md](.agents/skills/changelog-generation/SKILL.md)
 
 ### What Is a Changelog?
 
@@ -190,8 +190,8 @@ This gets inserted at the top of your `CHANGELOG.md` and also becomes the body o
 
 ## Skill 3: GitHub Actions Release ⚙️
 
-**File:** [SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-release/SKILL.md)  
-**Templates:** [workflow-templates.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-release/references/workflow-templates.md)
+**File:** [SKILL.md](.agents/skills/github-actions-release/SKILL.md)  
+**Templates:** [workflow-templates.md](.agents/skills/github-actions-release/references/workflow-templates.md)
 
 ### What Is This?
 
@@ -235,7 +235,7 @@ The skill generates `.github/workflows/release.yml` that:
 7. Deploys to production
 8. Sends a Slack notification
 
-The [workflow-templates.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-release/references/workflow-templates.md) reference includes reusable snippets for:
+The [workflow-templates.md](.agents/skills/github-actions-release/references/workflow-templates.md) reference includes reusable snippets for:
 - Docker builds with GHCR
 - Multi-platform matrix builds (Linux/macOS/Windows, amd64/arm64)
 - Slack notifications
@@ -246,7 +246,7 @@ The [workflow-templates.md](file:///d:/Agent/st-github-release-agent/.agents/ski
 
 ## Skill 4: Artifact Signing & SBOM 🔐
 
-**File:** [SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/artifact-signing-sbom/SKILL.md)
+**File:** [SKILL.md](.agents/skills/artifact-signing-sbom/SKILL.md)
 
 ### What Is Artifact Signing?
 
@@ -320,7 +320,7 @@ This is increasingly **required** for enterprise customers and government contra
 
 ## Skill 5: Hotfix Release 🚑
 
-**File:** [SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/hotfix-release/SKILL.md)
+**File:** [SKILL.md](.agents/skills/hotfix-release/SKILL.md)
 
 ### What Is a Hotfix?
 
@@ -370,7 +370,7 @@ The agent:
 
 ## Skill 6: GitHub CLI (`gh`) 💻
 
-**File:** [SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/gh-cli/SKILL.md)
+**File:** [SKILL.md](.agents/skills/gh-cli/SKILL.md)
 
 ### What Is This?
 
@@ -427,8 +427,8 @@ gh run watch 12345
 
 ## Skill 7: GitHub Actions Docs 📚
 
-**File:** [SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-docs/SKILL.md)  
-**Topic Map:** [topic-map.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-docs/references/topic-map.md)
+**File:** [SKILL.md](.agents/skills/github-actions-docs/SKILL.md)  
+**Topic Map:** [topic-map.md](.agents/skills/github-actions-docs/references/topic-map.md)
 
 ### What Is This?
 
@@ -445,7 +445,7 @@ When you ask questions about GitHub Actions (syntax, triggers, runners, OIDC, et
 
 ### The Topic Map
 
-The skill includes a [topic-map.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-docs/references/topic-map.md) — a curated index of ~90 documentation pages organized by category:
+The skill includes a [topic-map.md](.agents/skills/github-actions-docs/references/topic-map.md) — a curated index of ~90 documentation pages organized by category:
 
 | Category | Examples |
 |----------|----------|
@@ -471,7 +471,7 @@ Instead of guessing, the skill:
 
 ## Supporting Files
 
-### [.github/release.yml](file:///d:/Agent/st-github-release-agent/.github/release.yml)
+### [.github/release.yml](.github/release.yml)
 
 This is GitHub's **auto-generated release notes configuration**. When you create a release on GitHub, it uses this file to categorize PRs by their labels:
 
@@ -485,7 +485,7 @@ This is GitHub's **auto-generated release notes configuration**. When you create
 
 It also **excludes** PRs from `dependabot` and `renovate` (automated dependency bots) and any PR labeled `ignore-for-release`.
 
-### [VERSION](file:///d:/Agent/st-github-release-agent/VERSION)
+### [VERSION](VERSION)
 
 A simple text file containing the current version: `0.1.0`. The semantic-versioning skill reads and updates this.
 
@@ -523,15 +523,15 @@ sequenceDiagram
 
 | File | Purpose |
 |------|---------|
-| [AGENTS.md](file:///d:/Agent/st-github-release-agent/AGENTS.md) | Agent brain — identity, rules, decision tree, safety boundaries |
-| [semantic-versioning/SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/semantic-versioning/SKILL.md) | Calculates next version from commits, creates tags |
-| [changelog-generation/SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/changelog-generation/SKILL.md) | Generates structured CHANGELOG.md from commits |
-| [github-actions-release/SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-release/SKILL.md) | Scaffolds CI/CD release workflows |
-| [workflow-templates.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-release/references/workflow-templates.md) | Reusable YAML for Docker, multi-platform, Slack, rollback, OIDC |
-| [artifact-signing-sbom/SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/artifact-signing-sbom/SKILL.md) | Sigstore signing, SBOM generation, SLSA provenance |
-| [hotfix-release/SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/hotfix-release/SKILL.md) | Emergency hotfix lifecycle with post-mortem |
-| [gh-cli/SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/gh-cli/SKILL.md) | GitHub CLI commands for releases, PRs, issues, CI |
-| [github-actions-docs/SKILL.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-docs/SKILL.md) | Docs-grounded answers about GitHub Actions |
-| [topic-map.md](file:///d:/Agent/st-github-release-agent/.agents/skills/github-actions-docs/references/topic-map.md) | Index of ~90 official GitHub Actions doc pages |
-| [.github/release.yml](file:///d:/Agent/st-github-release-agent/.github/release.yml) | GitHub auto-release-notes category configuration |
-| [VERSION](file:///d:/Agent/st-github-release-agent/VERSION) | Current version number (`0.1.0`) |
+| [AGENTS.md](AGENTS.md) | Agent brain — identity, rules, decision tree, safety boundaries |
+| [semantic-versioning/SKILL.md](.agents/skills/semantic-versioning/SKILL.md) | Calculates next version from commits, creates tags |
+| [changelog-generation/SKILL.md](.agents/skills/changelog-generation/SKILL.md) | Generates structured CHANGELOG.md from commits |
+| [github-actions-release/SKILL.md](.agents/skills/github-actions-release/SKILL.md) | Scaffolds CI/CD release workflows |
+| [workflow-templates.md](.agents/skills/github-actions-release/references/workflow-templates.md) | Reusable YAML for Docker, multi-platform, Slack, rollback, OIDC |
+| [artifact-signing-sbom/SKILL.md](.agents/skills/artifact-signing-sbom/SKILL.md) | Sigstore signing, SBOM generation, SLSA provenance |
+| [hotfix-release/SKILL.md](.agents/skills/hotfix-release/SKILL.md) | Emergency hotfix lifecycle with post-mortem |
+| [gh-cli/SKILL.md](.agents/skills/gh-cli/SKILL.md) | GitHub CLI commands for releases, PRs, issues, CI |
+| [github-actions-docs/SKILL.md](.agents/skills/github-actions-docs/SKILL.md) | Docs-grounded answers about GitHub Actions |
+| [topic-map.md](.agents/skills/github-actions-docs/references/topic-map.md) | Index of ~90 official GitHub Actions doc pages |
+| [.github/release.yml](.github/release.yml) | GitHub auto-release-notes category configuration |
+| [VERSION](VERSION) | Current version number (`0.1.0`) |
